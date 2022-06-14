@@ -26,7 +26,7 @@ const makeSut = (): SutTypes => {
 }
 
 describe('SignUp Controller', () => {
-  test('Should return 400 if no name is provided', () => {
+  test('Should return 400 if no name is provided.', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -41,7 +41,7 @@ describe('SignUp Controller', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('name'))
   })
 
-  test('Should return 400 if no email is provided', () => {
+  test('Should return 400 if no email is provided.', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -56,7 +56,7 @@ describe('SignUp Controller', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('email'))
   })
 
-  test('Should return 400 if no password is provided', () => {
+  test('Should return 400 if no password is provided.', () => {
     const { sut } = makeSut()
     const httpRequest = {
       body: {
@@ -71,7 +71,7 @@ describe('SignUp Controller', () => {
     expect(httpResponse.body).toEqual(new MissingParamError('password'))
   })
 
-  test('Should return 400 if an invalid email is provided', () => {
+  test('Should return 400 if an invalid email is provided.', () => {
     const { sut, emailValidatorStub } = makeSut()
     const httpRequest = {
       body: {
@@ -87,5 +87,21 @@ describe('SignUp Controller', () => {
     const httpResponse = sut.handle(httpRequest)
     expect(httpResponse.statusCode).toBe(400)
     expect(httpResponse.body).toEqual(new InvalidParamError('email'))
+  })
+
+  test('Should call emailValidator with correct email.', () => {
+    const { sut, emailValidatorStub } = makeSut()
+    const isValidSpy = jest.spyOn(emailValidatorStub, 'isValid')
+    const httpRequest = {
+      body: {
+        name: 'fake name',
+        email: 'fake.email@email.com',
+        password: 'fake_password123',
+        passwordConfirmation: 'fake_password123'
+      }
+    }
+
+    sut.handle(httpRequest)
+    expect(isValidSpy).toHaveBeenCalledWith('fake.email@email.com')
   })
 })
