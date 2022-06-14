@@ -4,7 +4,7 @@
   "description": "project developmented on clean arch course by Rodrigo Manguinho",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --passWithNoTests --watch ",
     "test:staged": "jest --passWithNoTests",
     "lint-staged": "lint-staged"
   },
